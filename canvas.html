@@ -17,11 +17,7 @@
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
 
-    var x = canvas.width/2;
-    var y = canvas.height-30;
-    var dx = -1;
-    var dy = -1;
-    var ballRadius = 10;
+    var waves = [];
 
     //// PLAYER 1 VARIABLES/////////////
     var x1 = canvas.width/4;
@@ -113,6 +109,51 @@
         }
         if(y2 + dy2 > canvas.height - player2radius || y2 + dy2 < player2radius) {
             dy2 = -dy2;
+        }
+
+        //DRAW THE WAVES
+        for (w = 0; w < waves.length; w++) {
+            ctx.beginPath();
+            ctx.arc(waves[w].x, waves[w].y, waves[w].power, 0, Math.PI*2);
+            if (waves[w].player == 1) {
+                ctx.fillStyle = "#1A19DD";
+            } else {
+                ctx.fillStyle = "#dd100f";
+            }
+
+
+            ctx.fill();
+            ctx.closePath();
+            waves[w].x = waves[w].x + waves[w].dx;
+            waves[w].y = waves[w].y + waves[w].dy;
+            //// wave collisions ////
+            if(waves[w].x + waves[w].dx > canvas.width- waves[w].power || waves[w].x + waves[w].dx < waves[w].power) {
+                waves[w].dx = -waves[w].dx;
+                if (waves[w].power < 3) {
+                    waves.splice(w, 1);
+                } else {
+                    waves[w].power = waves[w].power - 3;
+                    if (waves[w].player == 1) {
+                        waves[w].player = 2;
+                    } else {
+                        waves[w].player = 1;
+                    }
+                }
+            }
+            if(waves[w].y + waves[w].dy > canvas.height- waves[w].power || waves[w].y + waves[w].dy < waves[w].power) {
+                waves[w].dy = -waves[w].dy;
+                if (waves[w].power < 3) {
+                    waves.splice(w, 1);
+                } else {
+                    waves[w].power = waves[w].power - 3;
+                    if (waves[w].player == 1) {
+                        waves[w].player = 2;
+                    } else {
+                        waves[w].player = 1;
+                    }
+                }
+            }
+            /////////////////////////
         }
 
 
@@ -225,6 +266,15 @@
             if (dy1 < 3) {
                 dy1 = dy1 + player1moveSpeedVertical;
             }
+            //create a wave and push it into the waves array
+            waves.push({
+                x: x1,
+                y: y1,
+                dx: 0,
+                dy: -(player1charge/5),
+                player: 1,
+                power: player1charge / 2
+            });
             player1charge = 0;
         }
         // key => S  --- PLAYER 1
@@ -237,6 +287,15 @@
             if (dy1 < 3) {
                 dy1 = dy1 - player1moveSpeedVertical;
             }
+            //create a wave and push it into the waves array
+            waves.push({
+                x: x1,
+                y: y1,
+                dx: 0,
+                dy: (player1charge/5),
+                player: 1,
+                power: player1charge / 2
+            });
             player1charge = 0;
         }
         // key => A  --- PLAYER 1
@@ -249,6 +308,15 @@
             if (dx1 < 3) {
                 dx1 = dx1 + player1moveSpeedHorizontal;
             }
+            //create a wave and push it into the waves array
+            waves.push({
+                x: x1,
+                y: y1,
+                dx: -(player1charge/5),
+                dy: 0,
+                player: 1,
+                power: player1charge / 2
+            });
             player1charge = 0;
         }
         // key => D  --- PLAYER 1
@@ -261,6 +329,15 @@
             if (dx1 < 3) {
                 dx1 = dx1 - player1moveSpeedHorizontal;
             }
+            //create a wave and push it into the waves array
+            waves.push({
+                x: x1,
+                y: y1,
+                dx: (player1charge/5),
+                dy: 0,
+                player: 1,
+                power: player1charge / 2
+            });
             player1charge = 0;
         }
         // key => Up Arrow  --- PLAYER 2
@@ -273,6 +350,15 @@
             if (dy2 < 3) {
                 dy2 = dy2 + player2moveSpeedVertical;
             }
+            //create a wave and push it into the waves array
+            waves.push({
+                x: x2,
+                y: y2,
+                dx: 0,
+                dy: -(player2charge/5),
+                player: 2,
+                power: player2charge / 2
+            });
             player2charge = 0;
         }
         // key => Down Arrow  --- PLAYER 2
@@ -285,7 +371,16 @@
             if (dy2 < 3) {
                 dy2 = dy2 - player2moveSpeedVertical;
             }
-            player1charge = 0;
+            //create a wave and push it into the waves array
+            waves.push({
+                x: x2,
+                y: y2,
+                dx: 0,
+                dy: (player2charge/5),
+                player: 2,
+                power: player2charge / 2
+            });
+            player2charge = 0;
         }
         // key => Left Arrow  --- PLAYER 2
         else if(e.keyCode == 37) {
@@ -297,6 +392,15 @@
             if (dx2 < 3) {
                 dx2 = dx2 + player2moveSpeedHorizontal;
             }
+            //create a wave and push it into the waves array
+            waves.push({
+                x: x2,
+                y: y2,
+                dx: -(player2charge/5),
+                dy: 0,
+                player: 2,
+                power: player2charge / 2
+            });
             player2charge = 0;
         }
         // key => Right Arrow  --- PLAYER 2
@@ -309,6 +413,15 @@
             if (dx2 < 3) {
                 dx2 = dx2 - player2moveSpeedHorizontal;
             }
+        //create a wave and push it into the waves array
+            waves.push({
+                x: x2,
+                y: y2,
+                dx: (player2charge/5),
+                dy: 0,
+                player: 2,
+                power: player2charge / 2
+            });
             player2charge = 0;
         }
 
