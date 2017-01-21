@@ -138,6 +138,7 @@ function playerCollisionDetection() {
         }
         if(circlesColliding(player2, wave) && waves[c].player == 1){
             console.log("PLAYER 2 HIT!");
+            console.log("Wave's Power: " + waves[c].power);
             if (waves[c].power <5) {
                 player2radius -= 1;
             }
@@ -235,13 +236,22 @@ function draw() {
     for (w = 0; w < waves.length; w++) {
         ctx.beginPath();
         ctx.arc(waves[w].x, waves[w].y, waves[w].power, 0, Math.PI*2);
+
         if (waves[w].player == 1) {
             ctx.fillStyle = "#1A19DD";
+            ctx.save();
+            ctx.shadowBlur = 40;
+            ctx.shadowColor = "blue";
         } else {
             ctx.fillStyle = "#dd100f";
+            ctx.save();
+            ctx.shadowBlur = 40;
+            ctx.shadowColor = "red";
         }
         ctx.fill();
         ctx.closePath();
+        ctx.restore();
+
         waves[w].x = waves[w].x + waves[w].dx;
         waves[w].y = waves[w].y + waves[w].dy;
         ///////// wave collisions  with walls //////////////
