@@ -104,12 +104,12 @@
             var player1= { x:x1, y:y1, r:player1radius };
             var player2= { x:x2, y:y2, r:player2radius };
             var wave = { x:waves[c].x, y:waves[c].y, r:waves[c].power };
-            if(circlesColliding(player1, wave)){
+            if(circlesColliding(player1, wave) && waves[c].player == 2){
                 console.log("PLAYER 1 HIT!");
                 player1radius -= 5;
                 waves.splice(c, 1); //remove the wave from the array
             }
-            if(circlesColliding(player2, wave)){
+            if(circlesColliding(player2, wave) && waves[c].player == 1){
                 console.log("PLAYER 2 HIT!");
                 player2radius -= 5;
                 waves.splice(c, 1); //remove the wave from the array
