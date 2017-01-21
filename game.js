@@ -41,16 +41,24 @@ function drawMiddleLine() {
     ctx.beginPath();
     ctx.moveTo(canvas.width/2,0);
     ctx.lineTo(canvas.width/2,canvas.height);
-    ctx.strokeStyle = '#9B9B9B';
+    ctx.strokeStyle = '#fdff00';
+    ctx.save();
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "#F8FF6B";
     ctx.stroke();
+    ctx.restore();
 }
 
 function drawBorder() {
     ctx.beginPath();
     ctx.rect(0, 0, canvas.width, canvas.height);
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = '#9b9b9b';
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#fdff00';
+    ctx.save();
+    ctx.shadowBlur = 50;
+    ctx.shadowColor = "#F8FF6B";
     ctx.stroke();
+    ctx.restore();
 }
 
 
