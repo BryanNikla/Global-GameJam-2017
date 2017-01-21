@@ -1,4 +1,3 @@
 <?php
 
-
-echo "This is our gamejam game!";
+echo "This is UR MOM'S gamejam game!";
