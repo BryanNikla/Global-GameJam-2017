@@ -16,37 +16,50 @@
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
 
-
     var x = canvas.width/2;
     var y = canvas.height-30;
     var dx = -1;
     var dy = -1;
     var ballRadius = 10;
 
-    //PLAYER 1 VARIABLES
+    //// PLAYER 1 VARIABLES/////////////
     var x1 = canvas.width/2;
     var y1 = canvas.height-30;
     var dx1 = -1;
     var dy1 = -1;
-    var player1radius = 10;
+    var player1radius = 20;
     var upPressed1 = false;
     var downPressed1 = false;
     var leftPressed1 = false;
     var rightPressed1 = false;
+    ////////////////////////////////////
 
-    //PLAYER 2 VARIABLES
-    var x2 = canvas.width/2;
+    //// PLAYER 2 VARIABLES ////////////
+    var x2 = canvas.width/4;
     var y2 = canvas.height-30;
     var dx2 = -1;
     var dy2 = -1;
-    var player2radius = 10;
+    var player2radius = 20;
     var upPressed2 = false;
     var downPressed2 = false;
     var leftPressed2 = false;
     var rightPressed2 = false;
+    ////////////////////////////////////
+
+    /**
+     * Draws the Line separating each half of the playing area
+     */
+    function drawMiddleLine() {
+        ctx.beginPath();
+        ctx.moveTo(canvas.width/2,0);
+        ctx.lineTo(canvas.width/2,canvas.height);
+        ctx.stroke();
+    }
 
 
-
+    /**
+     * Draws player 1 to the canvas
+     */
     function drawPlayer1() {
         ctx.beginPath();
         ctx.arc(x1, y1, player1radius, 0, Math.PI*2);
@@ -55,6 +68,18 @@
         ctx.closePath();
     }
 
+    /**
+     * Draws player 2 to the canvas
+     */
+    function drawPlayer2() {
+        ctx.beginPath();
+        ctx.arc(x2, y2, player2radius, 0, Math.PI*2);
+        ctx.fillStyle = "#3add2b";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    //delete this eventually. reference right now
     function drawBall() {
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -63,6 +88,7 @@
         ctx.closePath();
     }
 
+    //delete this eventually. reference for right now
     function drawPaddle() {
         ctx.beginPath();
         ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
@@ -72,9 +98,14 @@
     }
 
 
+    /**
+     * Clears the canvas then redraws the game state
+     */
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clears canvas for a complete redraw
+        drawMiddleLine();
         drawPlayer1();
+        drawPlayer2();
         //x1 += dx1;
         //y1 += dy1;
 
@@ -114,7 +145,6 @@
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
 
-
     //Key press listener
     function keyDownHandler(e) {
         // key => W  --- PLAYER 1
@@ -137,7 +167,6 @@
             rightPressed1 = true;
             console.log("D Pressed");
         }
-
         // key => Up Arrow  --- PLAYER 2
         if(e.keyCode == 38) {
             upPressed2 = true;
@@ -160,10 +189,6 @@
         }
     }
 
-
-
-
-
     //Key release listener
     function keyUpHandler(e) {
         // key => W  --- PLAYER 1
@@ -182,7 +207,6 @@
         else if(e.keyCode == 68) {
             rightPressed1 = false;
         }
-
         // key => Up Arrow  --- PLAYER 2
         if(e.keyCode == 38) {
             upPressed2 = false;
@@ -203,9 +227,8 @@
 
     }
 
-    setInterval(draw, 1);
+    setInterval(draw, 1); //call the draw() function every 1 ms
 </script>
-
 
 
 
