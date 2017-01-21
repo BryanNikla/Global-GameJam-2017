@@ -77,11 +77,15 @@
     function drawPlayer2() {
         ctx.beginPath();
         ctx.arc(x2, y2, player2radius, 0, Math.PI*2);
-        ctx.fillStyle = "#3add2b";
+        ctx.fillStyle = "#dd504a";
         ctx.fill();
         ctx.closePath();
     }
 
+    /**
+     * Pass in two circles with x, y, and radius values.
+     * Determine if the two circles are colliding and return true if they are.
+     */
     function circlesColliding(c1,c2){
         var dx=c2.x-c1.x;
         var dy=c2.y-c1.y;
@@ -333,11 +337,14 @@
         // key => W  --- PLAYER 1
         if(e.keyCode == 87) {
             upPressed1 = false;
-            player1moveSpeedVertical = player1charge / 10;
+            player1moveSpeedVertical = player1charge / 5;
             console.log("///////////////////////");
             console.log("Player 1 charge: " + player1charge);
             console.log("player 1 move sp Vertical: " + player1moveSpeedVertical);
-            if (dy1 < 3) {
+            if (dy1 < 0) {
+                dy1 = 0;
+                dy1 = dy1 + player1moveSpeedVertical;
+            } else {
                 dy1 = dy1 + player1moveSpeedVertical;
             }
             //create a wave and push it into the waves array
@@ -349,16 +356,20 @@
                 player: 1,
                 power: player1charge / 2
             });
+            player1radius -= player1charge/10;
             player1charge = 0;
         }
         // key => S  --- PLAYER 1
         else if(e.keyCode == 83) {
             downPressed1 = false;
-            player1moveSpeedVertical = player1charge / 10;
+            player1moveSpeedVertical = player1charge / 5;
             console.log("///////////////////////");
             console.log("Player 1 charge: " + player1charge);
             console.log("player 1 move speed: " + player1moveSpeedVertical);
-            if (dy1 < 3) {
+            if (dy1 > 0) {
+                dy1 = 0;
+                dy1 = dy1 - player1moveSpeedVertical;
+            } else {
                 dy1 = dy1 - player1moveSpeedVertical;
             }
             //create a wave and push it into the waves array
@@ -370,6 +381,7 @@
                 player: 1,
                 power: player1charge / 2
             });
+            player1radius -= player1charge/10;
             player1charge = 0;
         }
         // key => A  --- PLAYER 1
@@ -379,7 +391,10 @@
             console.log("///////////////////////");
             console.log("Player 1 charge: " + player1charge);
             console.log("player 1 move sp Horizontal: " + player1moveSpeedHorizontal);
-            if (dx1 < 3) {
+            if (dx1 < 0) {
+                dx1 = 0;
+                dx1 = dx1 + player1moveSpeedHorizontal;
+            } else {
                 dx1 = dx1 + player1moveSpeedHorizontal;
             }
             //create a wave and push it into the waves array
@@ -391,6 +406,7 @@
                 player: 1,
                 power: player1charge / 2
             });
+            player1radius -= player1charge/10;
             player1charge = 0;
         }
         // key => D  --- PLAYER 1
@@ -400,7 +416,10 @@
             console.log("///////////////////////");
             console.log("Player 1 charge: " + player1charge);
             console.log("player 1 move sp Horizontal: " + player1moveSpeedHorizontal);
-            if (dx1 < 3) {
+            if (dx1 > 0) {
+                dx1 = 0;
+                dx1 = dx1 - player1moveSpeedHorizontal;
+            } else {
                 dx1 = dx1 - player1moveSpeedHorizontal;
             }
             //create a wave and push it into the waves array
@@ -412,6 +431,7 @@
                 player: 1,
                 power: player1charge / 2
             });
+            player1radius -= player1charge/10;
             player1charge = 0;
         }
         // key => Up Arrow  --- PLAYER 2
@@ -421,7 +441,10 @@
             console.log("///////////////////////");
             console.log("Player 2 charge: " + player2charge);
             console.log("player 2 move sp Vertical: " + player2moveSpeedVertical);
-            if (dy2 < 3) {
+            if (dy2 < 0) {
+                dy2 = 0;
+                dy2 = dy2 + player2moveSpeedVertical;
+            } else {
                 dy2 = dy2 + player2moveSpeedVertical;
             }
             //create a wave and push it into the waves array
@@ -433,6 +456,7 @@
                 player: 2,
                 power: player2charge / 2
             });
+            player2radius -= player2charge/10;
             player2charge = 0;
         }
         // key => Down Arrow  --- PLAYER 2
@@ -442,7 +466,10 @@
             console.log("///////////////////////");
             console.log("Player 2 charge: " + player2charge);
             console.log("player 2 move speed: " + player2moveSpeedVertical);
-            if (dy2 < 3) {
+            if (dy2 > 0) {
+                dy2 = 0;
+                dy2 = dy2 - player2moveSpeedVertical;
+            } else {
                 dy2 = dy2 - player2moveSpeedVertical;
             }
             //create a wave and push it into the waves array
@@ -454,6 +481,7 @@
                 player: 2,
                 power: player2charge / 2
             });
+            player2radius -= player2charge/10;
             player2charge = 0;
         }
         // key => Left Arrow  --- PLAYER 2
@@ -463,7 +491,10 @@
             console.log("///////////////////////");
             console.log("Player 2 charge: " + player2charge);
             console.log("player 2 move sp Horizontal: " + player2moveSpeedHorizontal);
-            if (dx2 < 3) {
+            if (dx2 < 0) {
+                dx2 = 0;
+                dx2 = dx2 + player2moveSpeedHorizontal;
+            } else {
                 dx2 = dx2 + player2moveSpeedHorizontal;
             }
             //create a wave and push it into the waves array
@@ -475,6 +506,7 @@
                 player: 2,
                 power: player2charge / 2
             });
+            player2radius -= player2charge/10;
             player2charge = 0;
         }
         // key => Right Arrow  --- PLAYER 2
@@ -484,7 +516,10 @@
             console.log("///////////////////////");
             console.log("Player 2 charge: " + player2charge);
             console.log("player 2 move sp Horizontal: " + player2moveSpeedHorizontal);
-            if (dx2 < 3) {
+            if (dx2 > 0) {
+                dx2 = 0;
+                dx2 = dx2 - player2moveSpeedHorizontal;
+            } else {
                 dx2 = dx2 - player2moveSpeedHorizontal;
             }
         //create a wave and push it into the waves array
@@ -496,13 +531,21 @@
                 player: 2,
                 power: player2charge / 2
             });
+            player2radius -= player2charge/10;
             player2charge = 0;
         }
-
-
     }
 
+    function playerGrow(){
+            player1radius += 1;
+            if (player1radius > 40) {player1radius = 40;}
+            player2radius += 1;
+            if (player2radius > 40) {player2radius = 40;}
+    }
+
+
     var gamePlay = setInterval(draw, 25); //call the draw() function every 1 ms
+    var player1grow = setInterval(playerGrow, 750);
 </script>
 
 
