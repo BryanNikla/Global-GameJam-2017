@@ -5,7 +5,7 @@
     <title>Gamedev Canvas</title>
     <style>
         * { padding: 0; margin: 0; }
-        canvas { background: #eee; display: block; margin: 0 auto; }
+        canvas { background: #1a1a1a; display: block; margin: 0 auto; }
     </style>
 </head>
 <body>
@@ -56,6 +56,15 @@
         ctx.beginPath();
         ctx.moveTo(canvas.width/2,0);
         ctx.lineTo(canvas.width/2,canvas.height);
+        ctx.strokeStyle = '#f8ff3e';
+        ctx.stroke();
+    }
+
+    function drawBorder() {
+        ctx.beginPath();
+        ctx.rect(0, 0, canvas.width, canvas.height);
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = '#f8ff3e';
         ctx.stroke();
     }
 
@@ -71,6 +80,13 @@
         ctx.closePath();
     }
 
+    function drawPlayer1Charge() {
+        ctx.beginPath();
+        ctx.arc(x1, y1, player1radius*( ((player1charge*100)/40)/100 ), 0, Math.PI*2);
+        ctx.fillStyle = "#03ddc1";
+        ctx.fill();
+    }
+
     /**
      * Draws player 2 to the canvas
      */
@@ -80,6 +96,13 @@
         ctx.fillStyle = "#dd504a";
         ctx.fill();
         ctx.closePath();
+    }
+
+    function drawPlayer2Charge() {
+        ctx.beginPath();
+        ctx.arc(x2, y2, player2radius*( ((player2charge*100)/40)/100 ), 0, Math.PI*2);
+        ctx.fillStyle = "#dd325d";
+        ctx.fill();
     }
 
     /**
@@ -167,8 +190,11 @@
         gameOver();
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clears canvas for a complete redraw
         drawMiddleLine();
+        drawBorder();
         drawPlayer1();
         drawPlayer2();
+        drawPlayer1Charge();
+        drawPlayer2Charge();
         playerCollisionDetection();
         x1 += dx1;
         y1 += dy1;
