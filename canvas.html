@@ -82,14 +82,90 @@
         ctx.closePath();
     }
 
+    function circlesColliding(c1,c2){
+        var dx=c2.x-c1.x;
+        var dy=c2.y-c1.y;
+        var rSum=c1.r+c2.r;
+        return(dx*dx+dy*dy<=rSum*rSum);
+    }
+
+    /**
+     * Starts by looping through each wave in the wave array.
+     * sets variables for each player and the current wave.
+     * Determines if the wave has hit either play, and if it finds that it has collided with
+     * a player, remove that wave from the array and damage the player (lower their radius.)
+     * If it finds no players have been hit, then iterate through the waves again and check
+     * if the current wave is colliding with any OTHER waves.
+     * If it determines that the wave has collided with another wave, AND that it is not
+     * checking against iself, remove both waves from the waves array.
+     */
+    function playerCollisionDetection() {
+        for (c = 0; c < waves.length; c++) {
+            var player1= { x:x1, y:y1, r:player1radius };
+            var player2= { x:x2, y:y2, r:player2radius };
+            var wave = { x:waves[c].x, y:waves[c].y, r:waves[c].power };
+            if(circlesColliding(player1, wave)){
+                console.log("PLAYER 1 HIT!");
+                player1radius -= 5;
+                waves.splice(c, 1); //remove the wave from the array
+            }
+            if(circlesColliding(player2, wave)){
+                console.log("PLAYER 2 HIT!");
+                player2radius -= 5;
+                waves.splice(c, 1); //remove the wave from the array
+            }
+            for (k = 0; k < waves.length; k++) {
+                var otherWave = { x:waves[k].x, y:waves[k].y, r:waves[k].power };
+                if(circlesColliding(wave, otherWave)){
+                    if(waves[c] == waves[k]){
+                        //do nothing
+                    } else {
+                        //detected 2 waves collided. remove both waves from the waves array.
+                        console.log("Waves Collided!");
+                        var wavesToRemove = [c, k];
+                        wavesToRemove.sort();
+                        for (var i = wavesToRemove.length - 1; i >= 0; i--){
+                            waves.splice(wavesToRemove[i], 1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Determines if a player's radius is less than 5. If player's radius is less than 5
+     * end the game and determine the other player as the winner!
+     */
+    function gameOver() {
+        if (player1radius < 5) {
+            clearInterval(gamePlay);
+            ctx.beginPath();
+            ctx.font = "16px Arial";
+            ctx.fillText("PLAYER 2 WINS!",(canvas.width/2),canvas.height/2);
+            //todo: fix this
+            ctx.closePath();
+            console.log("GAME OVER. Player 2 WINS");
+
+        }
+        if (player2radius < 5) {
+            clearInterval(gamePlay);
+            ctx.font = "16px Arial";
+            ctx.fillText("PLAYER 1 WINS!",(canvas.width/2),canvas.height/2);
+            console.log("GAME OVER. Player 1 WINS");
+        }
+    }
+
     /**
      * Clears the canvas then redraws the game state
      */
     function draw() {
+        gameOver();
         ctx.clearRect(0, 0, canvas.width, canvas.height); //clears canvas for a complete redraw
         drawMiddleLine();
         drawPlayer1();
         drawPlayer2();
+        playerCollisionDetection();
         x1 += dx1;
         y1 += dy1;
         x2 += dx2;
@@ -120,17 +196,15 @@
             } else {
                 ctx.fillStyle = "#dd100f";
             }
-
-
             ctx.fill();
             ctx.closePath();
             waves[w].x = waves[w].x + waves[w].dx;
             waves[w].y = waves[w].y + waves[w].dy;
-            //// wave collisions ////
+            ///////// wave collisions  with walls //////////////
             if(waves[w].x + waves[w].dx > canvas.width- waves[w].power || waves[w].x + waves[w].dx < waves[w].power) {
-                waves[w].dx = -waves[w].dx;
+                waves[w].dx = -waves[w].dx; //reverse the dx
                 if (waves[w].power < 3) {
-                    waves.splice(w, 1);
+                    waves.splice(w, 1); //remove the wave from the array
                 } else {
                     waves[w].power = waves[w].power - 3;
                     if (waves[w].player == 1) {
@@ -141,9 +215,9 @@
                 }
             }
             if(waves[w].y + waves[w].dy > canvas.height- waves[w].power || waves[w].y + waves[w].dy < waves[w].power) {
-                waves[w].dy = -waves[w].dy;
+                waves[w].dy = -waves[w].dy; //reverse the dy
                 if (waves[w].power < 3) {
-                    waves.splice(w, 1);
+                    waves.splice(w, 1); //remove the wave from the array
                 } else {
                     waves[w].power = waves[w].power - 3;
                     if (waves[w].player == 1) {
@@ -153,7 +227,7 @@
                     }
                 }
             }
-            /////////////////////////
+            ////////////////end of wave collisions with walls /////////
         }
 
 
@@ -269,7 +343,7 @@
             //create a wave and push it into the waves array
             waves.push({
                 x: x1,
-                y: y1,
+                y: y1 - (player1radius*1.2) - player1charge,
                 dx: 0,
                 dy: -(player1charge/5),
                 player: 1,
@@ -290,7 +364,7 @@
             //create a wave and push it into the waves array
             waves.push({
                 x: x1,
-                y: y1,
+                y: y1 + (player1radius*1.2) + player1charge,
                 dx: 0,
                 dy: (player1charge/5),
                 player: 1,
@@ -310,7 +384,7 @@
             }
             //create a wave and push it into the waves array
             waves.push({
-                x: x1,
+                x: x1 - (player1radius*1.2) - player1charge,
                 y: y1,
                 dx: -(player1charge/5),
                 dy: 0,
@@ -331,7 +405,7 @@
             }
             //create a wave and push it into the waves array
             waves.push({
-                x: x1,
+                x: x1 + (player1radius*1.2) + player1charge,
                 y: y1,
                 dx: (player1charge/5),
                 dy: 0,
@@ -353,7 +427,7 @@
             //create a wave and push it into the waves array
             waves.push({
                 x: x2,
-                y: y2,
+                y: y2 - (player2radius*1.2) - player2charge,
                 dx: 0,
                 dy: -(player2charge/5),
                 player: 2,
@@ -374,7 +448,7 @@
             //create a wave and push it into the waves array
             waves.push({
                 x: x2,
-                y: y2,
+                y: y2 + (player2radius*1.2) + player2charge,
                 dx: 0,
                 dy: (player2charge/5),
                 player: 2,
@@ -394,7 +468,7 @@
             }
             //create a wave and push it into the waves array
             waves.push({
-                x: x2,
+                x: x2 - (player2radius*1.2) - player2charge,
                 y: y2,
                 dx: -(player2charge/5),
                 dy: 0,
@@ -415,7 +489,7 @@
             }
         //create a wave and push it into the waves array
             waves.push({
-                x: x2,
+                x: x2 + (player2radius*1.2) - player2charge,
                 y: y2,
                 dx: (player2charge/5),
                 dy: 0,
@@ -428,7 +502,7 @@
 
     }
 
-    setInterval(draw, 15); //call the draw() function every 1 ms
+    var gamePlay = setInterval(draw, 25); //call the draw() function every 1 ms
 </script>
 
 
