@@ -81,7 +81,7 @@ function resetGame(){
     player1moveSpeedHorizontal = 0;
     player1charge = 0;
     player1shield = false;
-    player1gun = false;
+    player1gun = 0;
     x2 = canvas.width * 0.75;
     y2 = canvas.height/2;
     dx2 = 0;
@@ -95,7 +95,7 @@ function resetGame(){
     player2moveSpeedHorizontal = 0;
     player2charge = 0;
     player2shield = false;
-    player2gun = false;
+    player2gun = 0;
 }
 
 //Game arrays
@@ -119,7 +119,7 @@ var player1moveSpeedVertical = 0;
 var player1moveSpeedHorizontal = 0;
 var player1charge = 0;
 var player1shield = false;
-var player1gun = false;
+var player1gun = 0;
 ////////////////////////////////////
 
 //// PLAYER 2 VARIABLES ////////////
@@ -136,7 +136,7 @@ var player2moveSpeedVertical = 0;
 var player2moveSpeedHorizontal = 0;
 var player2charge = 0;
 var player2shield = false;
-var player2gun = false;
+var player2gun = 0;
 ////////////////////////////////////
 
 /**
@@ -347,7 +347,6 @@ function circlesColliding(c1,c2){
  */
 function playerCollisionDetection() {
     for (pd = 0; pd < powerups.length; pd++) {
-        console.log("checking!");
         var player1p = { x:x1, y:y1, r:player1radius };
         var player2p = { x:x2, y:y2, r:player2radius };
         var powerup = { x:powerups[pd].x, y:powerups[pd].y, r:20 };
@@ -365,7 +364,7 @@ function playerCollisionDetection() {
                 console.log("player 1 got more health!");
             }
             if (powerups[pd].type == "gun") {
-                player1gun = true;
+                player1gun += 5;
                 powerups.splice(pd, 1); //remove the powerup from the array
                 console.log("player 1 got a gun!");
             }
@@ -384,7 +383,7 @@ function playerCollisionDetection() {
                 console.log("player 2 got more health!");
             }
             if (powerups[pd].type == "gun") {
-                player2gun = true;
+                player2gun += 5;
                 powerups.splice(pd, 1); //remove the powerup from the array
                 console.log("player 2 got a gun!");
             }
@@ -757,6 +756,27 @@ function keyUpHandler(e) {
             player: 1,
             power: player1charge / 2
         });
+        //scatter shots (correct)
+        console.log("gun:" + player1gun);
+        if (player1gun > 0) {
+            console.log("found bullets!");
+            waves.push({
+                x: x1 - (player1radius*1.4) - player1charge,
+                y: y1 - (player1radius*1.4) - player1charge,
+                dx: -(player1charge/5),
+                dy: -(player1charge/5),
+                player: 1,
+                power: 4
+            });
+            waves.push({
+                x: x1 + (player1radius*1.4) - player1charge,
+                y: y1 - (player1radius*1.4) - player1charge,
+                dx: (player1charge/5),
+                dy: -(player1charge/5),
+                player: 1,
+                power: 4
+            });
+        }
         player1radius -= player1charge/10;
         player1charge = 0;
     }
@@ -784,6 +804,27 @@ function keyUpHandler(e) {
             player: 1,
             power: player1charge / 2
         });
+        //scatter shots (correct)
+        console.log("gun:" + player1gun);
+        if (player1gun > 0) {
+            console.log("found bullets!");
+            waves.push({
+                x: x1 - (player1radius*1.4) - player1charge,
+                y: y1 + (player1radius*1.4) - player1charge,
+                dx: -(player1charge/5),
+                dy: (player1charge/5),
+                player: 1,
+                power: 4
+            });
+            waves.push({
+                x: x1 + (player1radius*1.4) - player1charge,
+                y: y1 + (player1radius*1.4) - player1charge,
+                dx: (player1charge/5),
+                dy: (player1charge/5),
+                player: 1,
+                power: 4
+            });
+        }
         player1radius -= player1charge/10;
         player1charge = 0;
     }
@@ -811,6 +852,27 @@ function keyUpHandler(e) {
             player: 1,
             power: player1charge / 2
         });
+        //scatter shots (correct)
+        console.log("gun:" + player1gun);
+        if (player1gun > 0) {
+            console.log("found bullets!");
+            waves.push({
+                x: x1 - (player1radius*1.4) - player1charge,
+                y: y1 - (player1radius*1.4) - player1charge,
+                dx: -(player1charge/5),
+                dy: -(player1charge/5),
+                player: 1,
+                power: 4
+            });
+            waves.push({
+                x: x1 - (player1radius*1.4) - player1charge,
+                y: y1 + (player1radius*1.4) - player1charge,
+                dx: -(player1charge/5),
+                dy: (player1charge/5),
+                player: 1,
+                power: 4
+            });
+        }
         player1radius -= player1charge/10;
         player1charge = 0;
     }
@@ -838,6 +900,27 @@ function keyUpHandler(e) {
             player: 1,
             power: player1charge / 2
         });
+        //scatter shots (correct)
+        console.log("gun:" + player1gun);
+        if (player1gun > 0) {
+            console.log("found bullets!");
+            waves.push({
+                x: x1 + (player1radius*1.4) - player1charge,
+                y: y1 + (player1radius*1.4) - player1charge,
+                dx: (player1charge/5),
+                dy: (player1charge/5),
+                player: 1,
+                power: 4
+            });
+            waves.push({
+                x: x1 + (player1radius*1.4) - player1charge,
+                y: y1 - (player1radius*1.4) - player1charge,
+                dx: (player1charge/5),
+                dy: -(player1charge/5),
+                player: 1,
+                power: 4
+            });
+        }
         player1radius -= player1charge/10;
         player1charge = 0;
     }
@@ -865,6 +948,27 @@ function keyUpHandler(e) {
             player: 2,
             power: player2charge / 2
         });
+        //scatter shots (correct)
+        console.log("gun:" + player2gun);
+        if (player2gun > 0) {
+            console.log("found bullets!");
+            waves.push({
+                x: x2 - (player2radius*1.4) - player2charge,
+                y: y2 - (player2radius*1.4) - player2charge,
+                dx: -(player2charge/5),
+                dy: -(player2charge/5),
+                player: 2,
+                power: 4
+            });
+            waves.push({
+                x: x2 + (player2radius*1.4) - player2charge,
+                y: y2 - (player2radius*1.4) - player2charge,
+                dx: (player2charge/5),
+                dy: -(player2charge/5),
+                player: 2,
+                power: 4
+            });
+        }
         player2radius -= player2charge/10;
         player2charge = 0;
     }
@@ -892,6 +996,27 @@ function keyUpHandler(e) {
             player: 2,
             power: player2charge / 2
         });
+        //scatter shots (correct)
+        console.log("gun:" + player2gun);
+        if (player2gun > 0) {
+            console.log("found bullets!");
+            waves.push({
+                x: x2 - (player2radius*1.4) - player2charge,
+                y: y2 + (player2radius*1.4) - player2charge,
+                dx: -(player2charge/5),
+                dy: (player2charge/5),
+                player: 2,
+                power: 4
+            });
+            waves.push({
+                x: x2 + (player2radius*1.4) - player2charge,
+                y: y2 + (player2radius*1.4) - player2charge,
+                dx: (player2charge/5),
+                dy: (player2charge/5),
+                player: 2,
+                power: 4
+            });
+        }
         player2radius -= player2charge/10;
         player2charge = 0;
     }
@@ -919,6 +1044,27 @@ function keyUpHandler(e) {
             player: 2,
             power: player2charge / 2
         });
+        //scatter shots (correct)
+        console.log("gun:" + player2gun);
+        if (player2gun > 0) {
+            console.log("found bullets!");
+            waves.push({
+                x: x2 - (player2radius*1.4) - player2charge,
+                y: y2 - (player2radius*1.4) - player2charge,
+                dx: -(player2charge/5),
+                dy: -(player2charge/5),
+                player: 2,
+                power: 4
+            });
+            waves.push({
+                x: x2 - (player2radius*1.4) - player2charge,
+                y: y2 + (player2radius*1.4) - player2charge,
+                dx: -(player2charge/5),
+                dy: (player2charge/5),
+                player: 2,
+                power: 4
+            });
+        }
         player2radius -= player2charge/10;
         player2charge = 0;
     }
@@ -946,6 +1092,27 @@ function keyUpHandler(e) {
             player: 2,
             power: player2charge / 2
         });
+        //scatter shots (correct)
+        console.log("gun:" + player2gun);
+        if (player2gun > 0) {
+            console.log("found bullets!");
+            waves.push({
+                x: x2 + (player2radius*1.4) - player2charge,
+                y: y2 + (player2radius*1.4) - player2charge,
+                dx: (player2charge/5),
+                dy: (player2charge/5),
+                player: 2,
+                power: 4
+            });
+            waves.push({
+                x: x2 + (player2radius*1.4) - player2charge,
+                y: y2 - (player2radius*1.4) - player2charge,
+                dx: (player2charge/5),
+                dy: -(player2charge/5),
+                player: 2,
+                power: 4
+            });
+        }
         player2radius -= player2charge/10;
         player2charge = 0;
     }
@@ -964,8 +1131,7 @@ function randomPowerup() {
     var spawn = false;
     var random = Math.random();
     var type = "null";
-    console.log(random);
-    if (random > 0.6) {
+    if (random > 0.5) {
         spawn = true;
     }
     var typeRandom = Math.random();
