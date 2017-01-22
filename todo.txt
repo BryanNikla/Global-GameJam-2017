@@ -2,7 +2,7 @@ Stretch to-do list
 --------------------------------------------------------------------------
 [X] Colored bursts that come off of players when hit by enemy color shots
 [X] Sound effects
-[ ] Title screen
+[X] Title screen
 [ ] Power-ups!
 [ ] Random start locations for each game restart
-[ ] Different damage levels for different sized shots
+[X] Different damage levels for different sized shots

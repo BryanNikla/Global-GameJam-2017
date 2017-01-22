@@ -13,6 +13,12 @@ backgroundAudio.volume=0.25;
 //ART
 drawing = new Image();
 drawing.src = "titleArt.png";
+health = new Image();
+health.src = "Health.png";
+gun = new Image();
+gun.src = "Scatter.png";
+shield = new Image();
+shield.src = "Sheild.png";
 
 //AUDIO
 var hitAudio = new Audio("sound1.wav");
@@ -61,6 +67,7 @@ function resetGame(){
     bursts = [];
     blueBursts = [];
     redBursts = [];
+    powerups = [];
     x1 = canvas.width/4;
     y1 = canvas.height/2;
     dx1 = 0;
@@ -73,6 +80,8 @@ function resetGame(){
     player1moveSpeedVertical = 0;
     player1moveSpeedHorizontal = 0;
     player1charge = 0;
+    player1shield = false;
+    player1gun = false;
     x2 = canvas.width * 0.75;
     y2 = canvas.height/2;
     dx2 = 0;
@@ -85,6 +94,8 @@ function resetGame(){
     player2moveSpeedVertical = 0;
     player2moveSpeedHorizontal = 0;
     player2charge = 0;
+    player2shield = false;
+    player2gun = false;
 }
 
 //Game arrays
@@ -92,6 +103,7 @@ var waves = [];
 var bursts = [];
 var blueBursts = [];
 var redBursts = [];
+var powerups = [];
 
 //// PLAYER 1 VARIABLES/////////////
 var x1 = canvas.width/4;
@@ -106,6 +118,8 @@ var rightPressed1 = false;
 var player1moveSpeedVertical = 0;
 var player1moveSpeedHorizontal = 0;
 var player1charge = 0;
+var player1shield = false;
+var player1gun = false;
 ////////////////////////////////////
 
 //// PLAYER 2 VARIABLES ////////////
@@ -121,6 +135,8 @@ var rightPressed2 = false;
 var player2moveSpeedVertical = 0;
 var player2moveSpeedHorizontal = 0;
 var player2charge = 0;
+var player2shield = false;
+var player2gun = false;
 ////////////////////////////////////
 
 /**
@@ -164,6 +180,42 @@ function drawPlayer1() {
     ctx.lineWidth = 6;
     ctx.stroke();
     ctx.restore();
+    if (player1shield) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x1, y1, (player1radius+1), 0, Math.PI*2);
+        ctx.strokeStyle = '#3fff1e';
+        ctx.lineWidth = 2;
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+    }
+}
+
+/**
+ * Draws player 2 to the canvas
+ */
+function drawPlayer2() {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x2, y2, player2radius, 0, Math.PI*2);
+    ctx.fillStyle = "#dd504a";
+    ctx.fill();
+    ctx.closePath();
+    ctx.strokeStyle = '#722826';
+    ctx.lineWidth = 6;
+    ctx.stroke();
+    ctx.restore();
+    if (player2shield) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x2, y2, (player2radius+1), 0, Math.PI*2);
+        ctx.strokeStyle = '#3fff1e';
+        ctx.lineWidth = 2;
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+    }
 }
 
 
@@ -172,6 +224,38 @@ function drawPlayer1Charge() {
     ctx.arc(x1, y1, player1radius*( ((player1charge*100)/40)/100 ), 0, Math.PI*2);
     ctx.fillStyle = "#03ddc1";
     ctx.fill();
+}
+
+function drawPowerups() {
+    for (pu = 0; pu < powerups.length; pu++) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(powerups[pu].x, powerups[pu].y, 20, 0, Math.PI*2);
+        if (powerups[pu].type == "shield") {
+            ctx.fillStyle = "#6fdd6c";
+            ctx.save();
+            ctx.drawImage(shield,powerups[pu].x,powerups[pu].y);
+            ctx.restore();
+        }
+        if (powerups[pu].type == "gun") {
+            ctx.fillStyle = "#dc9add";
+            ctx.save();
+            ctx.drawImage(gun,powerups[pu].x,powerups[pu].y);
+            ctx.restore();
+        }
+        if (powerups[pu].type == "health") {
+            ctx.fillStyle = "#ddd32c";
+            ctx.save();
+            ctx.drawImage(health,powerups[pu].x,powerups[pu].y);
+            ctx.restore();
+        }
+        //ctx.fill();
+        ctx.closePath();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        //ctx.stroke();
+        ctx.restore();
+    }
 }
 
 
@@ -231,21 +315,7 @@ function drawRedBursts() {
 }
 
 
-/**
- * Draws player 2 to the canvas
- */
-function drawPlayer2() {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(x2, y2, player2radius, 0, Math.PI*2);
-    ctx.fillStyle = "#dd504a";
-    ctx.fill();
-    ctx.closePath();
-    ctx.strokeStyle = '#722826';
-    ctx.lineWidth = 6;
-    ctx.stroke();
-    ctx.restore();
-}
+
 
 function drawPlayer2Charge() {
     ctx.beginPath();
@@ -276,6 +346,51 @@ function circlesColliding(c1,c2){
  * checking against iself, remove both waves from the waves array.
  */
 function playerCollisionDetection() {
+    for (pd = 0; pd < powerups.length; pd++) {
+        console.log("checking!");
+        var player1p = { x:x1, y:y1, r:player1radius };
+        var player2p = { x:x2, y:y2, r:player2radius };
+        var powerup = { x:powerups[pd].x, y:powerups[pd].y, r:20 };
+        if(circlesColliding(player1p, powerup)){
+            console.log("PLAYER 1 POWERUP!");
+            hitAudio.play(); //plays sound effect on pickup
+            if (powerups[pd].type == "shield") {
+                player1shield = true;
+                powerups.splice(pd, 1); //remove the powerup from the array
+                console.log("player 1 got a shield!");
+            }
+            if (powerups[pd].type == "health") {
+                player1radius = 40;
+                powerups.splice(pd, 1); //remove the powerup from the array
+                console.log("player 1 got more health!");
+            }
+            if (powerups[pd].type == "gun") {
+                player1gun = true;
+                powerups.splice(pd, 1); //remove the powerup from the array
+                console.log("player 1 got a gun!");
+            }
+        }
+        if(circlesColliding(player2p, powerup)){
+            console.log("PLAYER 2 POWERUP!");
+            hitAudio.play(); //plays sound effect on pickup
+            if (powerups[pd].type == "shield") {
+                player2shield = true;
+                powerups.splice(pd, 1); //remove the powerup from the array
+                console.log("player 2 got a shield!");
+            }
+            if (powerups[pd].type == "health") {
+                player2radius = 40;
+                powerups.splice(pd, 1); //remove the powerup from the array
+                console.log("player 2 got more health!");
+            }
+            if (powerups[pd].type == "gun") {
+                player2gun = true;
+                powerups.splice(pd, 1); //remove the powerup from the array
+                console.log("player 2 got a gun!");
+            }
+        }
+    }
+
     for (c = 0; c < waves.length; c++) {
         var player1= { x:x1, y:y1, r:player1radius };
         var player2= { x:x2, y:y2, r:player2radius };
@@ -283,57 +398,65 @@ function playerCollisionDetection() {
         if(circlesColliding(player1, wave) && waves[c].player == 2){
             console.log("PLAYER 1 HIT!!  Wave's Power: " + waves[c].power);
             hitAudio.play(); //plays sound effect on hit
-            if (waves[c].power <5) {
-                player1radius -= 0.5;
+            if (player1shield) {
+                player1shield = false;
+            } else {
+                if (waves[c].power <5) {
+                    player1radius -= 0.5;
+                }
+                if (waves[c].power <10) {
+                    player1radius -= 1;
+                }
+                if (waves[c].power <15) {
+                    player1radius -= 1.5;
+                }
+                if (waves[c].power <20) {
+                    player1radius -= 3;
+                }
+                if (waves[c].power <21) {
+                    player1radius -= 5;
+                }
+                //create a Blue BURST and push it into the Blue burst array
+                var blueIntensity = 3;
+                blueBursts.push({
+                    x: waves[c].x,
+                    y: waves[c].y,
+                    intensity: blueIntensity,
+                    r: 1
+                });
             }
-            if (waves[c].power <10) {
-                player1radius -= 1;
-            }
-            if (waves[c].power <15) {
-                player1radius -= 1.5;
-            }
-            if (waves[c].power <20) {
-                player1radius -= 3;
-            }
-            if (waves[c].power <21) {
-                player1radius -= 5;
-            }
-            //create a Blue BURST and push it into the Blue burst array
-            var blueIntensity = 3;
-            blueBursts.push({
-                x: waves[c].x,
-                y: waves[c].y,
-                intensity: blueIntensity,
-                r: 1
-            });
             waves.splice(c, 1); //remove the wave from the array
         }
         if(circlesColliding(player2, wave) && waves[c].player == 1){
             console.log("PLAYER 2 HIT!!  Wave's Power: " + waves[c].power);
             hitAudio.play(); //plays sound effect on hit
-            if (waves[c].power <5) {
-                player2radius -= 0.5;
+            if (player2shield) {
+                player2shield = false;
+            } else {
+                if (waves[c].power <5) {
+                    player2radius -= 0.5;
+                }
+                if (waves[c].power <10) {
+                    player2radius -= 1;
+                }
+                if (waves[c].power <15) {
+                    player2radius -= 1.5;
+                }
+                if (waves[c].power <20) {
+                    player2radius -= 3;
+                }
+                if (waves[c].power <21) {
+                    player2radius -= 5;
+                }
+                //create a red BURST and push it into the red burst array
+                var redIntensity = 3;
+                redBursts.push({
+                    x: waves[c].x,
+                    y: waves[c].y,
+                    intensity: redIntensity,
+                    r: 1
+                });
             }
-            if (waves[c].power <10) {
-                player2radius -= 1;
-            }
-            if (waves[c].power <15) {
-                player2radius -= 1.5;
-            }
-            if (waves[c].power <20) {
-                player2radius -= 3;
-            }
-            if (waves[c].power <21) {
-                player2radius -= 5;
-            }
-            //create a red BURST and push it into the red burst array
-            var redIntensity = 3;
-            redBursts.push({
-                x: waves[c].x,
-                y: waves[c].y,
-                intensity: redIntensity,
-                r: 1
-            });
             waves.splice(c, 1); //remove the wave from the array
         }
         //CHECK TO SEE IF WAVE COLLIDED WITH ANOTHER WAVE
@@ -437,6 +560,7 @@ function draw() {
             drawPlayer1Charge();
             drawPlayer2Charge();
             playerCollisionDetection();
+            drawPowerups();
             x1 += dx1;
             y1 += dy1;
             x2 += dx2;
@@ -513,7 +637,7 @@ function draw() {
                 ////////////////end of wave collisions with walls /////////
             }
 
-            //Sets player 1 charge up or down. TODO: THIS WILL HANDLE SHOOTING POWER?
+            //Sets player 1 charge up or down.
             if(upPressed1) {
                 if (player1charge < 40) {
                     player1charge += 1;
@@ -834,5 +958,37 @@ function playerGrow(){
     if (player2radius > 40) {player2radius = 40;}
 }
 
+
+function randomPowerup() {
+    ////////// POWERUPS!!!!!!! ///////////////////////
+    var spawn = false;
+    var random = Math.random();
+    var type = "null";
+    console.log(random);
+    if (random > 0.6) {
+        spawn = true;
+    }
+    var typeRandom = Math.random();
+    if (typeRandom < 1) {
+        type = "gun";
+    }
+    if (typeRandom < 0.66) {
+        type = "health";
+    }
+    if (typeRandom < 0.33) {
+        type = "shield";
+    }
+    //spawn a power-up!
+    if (spawn == true) {
+        powerups.push({
+            type: type,
+            x: canvas.width * Math.random(),
+            y: canvas.height * Math.random()
+        });
+    }
+}
+
+
 var gamePlay = setInterval(draw, 25); //call the draw() function every 1 ms
 var player1grow = setInterval(playerGrow, 750);
+var powerupsTimer = setInterval(randomPowerup, 2500);
