@@ -1,0 +1,168 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: #000000;
+}
+
+canvas {
+    background: #1a1a1a;
+    display: block;
+    margin: 0 auto;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+
+nav {
+    width: 100%;
+    display: flex;
+    background-color: #090a24;
+    height: 6vh;
+    color: white;
+    font-size: 4.5vh;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+h1 {
+    font-size: inherit;
+    height: auto;
+    width: 76%;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.navLink {
+    height: inherit;
+    width: 12%;
+    text-align: center;
+    padding-right: 4.5px;
+}
+
+a:hover {
+    color: #fdff23;
+    font-weight: bold;
+}
+
+#canvasWrapper {
+    position: absolute;
+    left: 0;
+    top: 6vh;
+    z-index: 10;
+    width: 100%;
+    height: auto;
+}
+#logoWrapper {
+    z-index: 1;
+    width: 100%;
+    height: 600px;
+    position: absolute;
+    left: 0;
+    top: 6vh;
+    display: flex;
+}
+#leftLogo {
+    width: 50%;
+    margin-left: 2px;
+    height: 100%;
+    background-image: url(globalGameJam.png);
+    background-repeat: no-repeat;
+    background-position: left;
+    background-position-y: center;
+}
+
+#rightLogo {
+    width: 50%;
+    margin-right: 2px;
+    height: 100%;
+    background-image: url(sarasota.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-position-y: center;
+}
+
+section {
+    width: 75%;
+    margin: 0 auto;
+    margin-top: 2vh;
+    color: #ffffff;
+}
+
+h2 {
+    font-size: 7vh;
+    font-weight: bold;
+    font-family: 'Ubuntu', sans-serif;
+    color: #ffffff;
+    text-shadow: 4px 3px #0f1043;
+}
+
+h3 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 4vh;
+    text-align: center;
+}
+
+h4 {
+    display: flex;
+    font-size: 2vh;
+    font-family: 'Ubuntu', sans-serif;
+    margin-top: 0.5vh;
+}
+
+p {
+    font-size: 3vh;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+#controlsContainer {
+    width: 100%;
+    height: auto;
+    display: flex;
+}
+#player1 {
+    width: 50%;
+    height: auto;
+}
+#player1 hr {
+    width: 60%;
+    margin: 0 auto;
+}
+#player2 {
+    width: 50%;
+    height: auto;
+}
+#player2 hr {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.control {
+    width: 52%;
+    text-align: right;
+}
+.key {
+    width: 48%;
+    text-align: left;
+}
+
+
+
+#backToTop {
+    position: fixed;
+    bottom: 1vh;
+    right: 1vw;
+    width: auto;
+    height: auto;
+    border-radius: 50px;
+    background-color: #000000;
+}
+#backToTop img {
+    width: 5vw;
+    height: auto;
+}
