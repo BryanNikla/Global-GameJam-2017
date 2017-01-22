@@ -176,6 +176,22 @@ h5 {
     border-radius: 50px;
     background-color: #000000;
 }
+
+#muteMusic {
+    position: fixed;
+    bottom: 2vh;
+    right: 6vw;
+    width: auto;
+    height: auto;
+    border-radius: 50px;
+    background-color: #000000;
+}
+#muteMusic img {
+    width: 4vw;
+    height: auto;
+}
+
+
 #backToTop img {
     width: 5vw;
     height: auto;

@@ -5,6 +5,11 @@ window.addEventListener("keydown", function(e) {
     }
 }, false);
 
+
+//set music volume
+backgroundAudio=document.getElementById("music");
+backgroundAudio.volume=0.25;
+
 //ART
 drawing = new Image();
 drawing.src = "titleArt.png";
@@ -829,7 +834,5 @@ function playerGrow(){
     if (player2radius > 40) {player2radius = 40;}
 }
 
-
 var gamePlay = setInterval(draw, 25); //call the draw() function every 1 ms
 var player1grow = setInterval(playerGrow, 750);
-//var burstInterval = setInterval(drawBursts, 1000);

@@ -7,6 +7,12 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
 </head>
 <body id="top">
+
+<audio loop autoplay id="music"> <!-- MUSIC AUDIO -->
+    <source src="music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
 <nav>
     <h1>Global Game Jam 2017 - Balls that Shoot Each Other!</h1>
     <div class="navLink">
@@ -25,13 +31,21 @@
     <div id="rightLogo"></div>
 </div>
 <!-- GAME CANVAS -->
-<a href="#top">
+<a href="#top"> <!-- Return to Top Button -->
     <div id="backToTop">
         <img src="up.png">
     </div>
+</a> <!-- Muite Music Button -->
+<a href="#" onclick="document.getElementById('music').muted = true;">
+    <div id="muteMusic">
+        <img src="mute.png">
+    </div>
 </a>
+
 <div id="canvasWrapper">
-    <canvas id="gameCanvas" width="1000" height="600"></canvas>
+    <canvas id="gameCanvas" width="1000" height="600">
+
+    </canvas>
 </div>
 <div id="spacer" style="width: 100%; height: 610px;">&nbsp;</div>
 <section id="instructions">
