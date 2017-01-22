@@ -39,6 +39,8 @@ function drawWins() {
 function resetGame(){
     waves = [];
     bursts = [];
+    blueBursts = [];
+    redBursts = [];
     x1 = canvas.width/4;
     y1 = canvas.height/2;
     dx1 = 0;
