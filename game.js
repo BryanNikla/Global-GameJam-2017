@@ -62,6 +62,19 @@ function drawWins() {
     ctx.restore();
 }
 
+function drawGunCharges() {
+    ctx.save();
+    ctx.font = "20px Arial";
+    ctx.fillStyle = '#aa2ca1';
+    ctx.fillText(player1gun,5, canvas.height-10);
+    ctx.restore();
+    ctx.save();
+    ctx.font = "20px Arial";
+    ctx.fillStyle = '#aa2ca1';
+    ctx.fillText(player2gun, (canvas.width -15), canvas.height-10);
+    ctx.restore();
+}
+
 function resetGame(){
     waves = [];
     bursts = [];
@@ -522,6 +535,7 @@ function draw() {
 
     } else {
         drawWins();
+        drawGunCharges();
         //Determine if there was a gameState and display a game over screen
         if (gameState == "Player 1" || gameState == "Player 2") {
             ctx.save();
@@ -776,6 +790,7 @@ function keyUpHandler(e) {
                 player: 1,
                 power: 4
             });
+            player1gun -= 1;
         }
         player1radius -= player1charge/10;
         player1charge = 0;
@@ -824,6 +839,7 @@ function keyUpHandler(e) {
                 player: 1,
                 power: 4
             });
+            player1gun -= 1;
         }
         player1radius -= player1charge/10;
         player1charge = 0;
@@ -872,6 +888,7 @@ function keyUpHandler(e) {
                 player: 1,
                 power: 4
             });
+            player1gun -= 1;
         }
         player1radius -= player1charge/10;
         player1charge = 0;
@@ -920,6 +937,7 @@ function keyUpHandler(e) {
                 player: 1,
                 power: 4
             });
+            player1gun -= 1;
         }
         player1radius -= player1charge/10;
         player1charge = 0;
@@ -968,6 +986,7 @@ function keyUpHandler(e) {
                 player: 2,
                 power: 4
             });
+            player2gun -= 1;
         }
         player2radius -= player2charge/10;
         player2charge = 0;
@@ -1016,6 +1035,7 @@ function keyUpHandler(e) {
                 player: 2,
                 power: 4
             });
+            player2gun -= 1;
         }
         player2radius -= player2charge/10;
         player2charge = 0;
@@ -1064,6 +1084,7 @@ function keyUpHandler(e) {
                 player: 2,
                 power: 4
             });
+            player2gun -= 1;
         }
         player2radius -= player2charge/10;
         player2charge = 0;
@@ -1112,6 +1133,7 @@ function keyUpHandler(e) {
                 player: 2,
                 power: 4
             });
+            player2gun -= 1;
         }
         player2radius -= player2charge/10;
         player2charge = 0;
