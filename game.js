@@ -475,40 +475,44 @@ function playerCollisionDetection() {
         for (k = 0; k < waves.length; k++) {
             var otherWave = { x:waves[k].x, y:waves[k].y, r:waves[k].power };
             if(circlesColliding(wave, otherWave)){
-                if(waves[c] == waves[k]){
-                    //do nothing
+                if (waves[c].player == waves[k].player) {
+                    //DO NOTHING
                 } else {
-                    //detected 2 waves collided. remove both waves from the waves array.
-                    //determine intensity
-                    var intensity = 0;
-                    combinedPower = waves[c].power + waves[k].power;
-                    if (combinedPower < 41) {
-                        intensity = 5;
-                    }
-                    if (combinedPower < 40) {
-                        intensity = 4;
-                    }
-                    if (combinedPower < 30) {
-                        intensity = 3;
-                    }
-                    if (combinedPower < 20) {
-                        intensity = 2;
-                    }
-                    if (combinedPower < 10) {
-                        intensity = 1;
-                    }
-                    burstAudio.play(); //plays sound effect on hit
-                    //create a BURST and push it into the burst array
-                    bursts.push({
-                        x: waves[c].x,
-                        y: waves[c].y,
-                        intensity: intensity,
-                        r: 1
-                    });
-                    var wavesToRemove = [c, k];
-                    wavesToRemove.sort();
-                    for (var i = wavesToRemove.length - 1; i >= 0; i--){
-                        waves.splice(wavesToRemove[i], 1);
+                    if(waves[c] == waves[k]){
+                        //DO NOTHING
+                    } else {
+                        //detected 2 waves collided. remove both waves from the waves array.
+                        //determine intensity
+                        var intensity = 0;
+                        combinedPower = waves[c].power + waves[k].power;
+                        if (combinedPower < 41) {
+                            intensity = 5;
+                        }
+                        if (combinedPower < 40) {
+                            intensity = 4;
+                        }
+                        if (combinedPower < 30) {
+                            intensity = 3;
+                        }
+                        if (combinedPower < 20) {
+                            intensity = 2;
+                        }
+                        if (combinedPower < 10) {
+                            intensity = 1;
+                        }
+                        burstAudio.play(); //plays sound effect on hit
+                        //create a BURST and push it into the burst array
+                        bursts.push({
+                            x: waves[c].x,
+                            y: waves[c].y,
+                            intensity: intensity,
+                            r: 1
+                        });
+                        var wavesToRemove = [c, k];
+                        wavesToRemove.sort();
+                        for (var i = wavesToRemove.length - 1; i >= 0; i--){
+                            waves.splice(wavesToRemove[i], 1);
+                        }
                     }
                 }
             }
@@ -1175,7 +1179,6 @@ function randomPowerup() {
         });
     }
 }
-
 
 var gamePlay = setInterval(draw, 25); //call the draw() function every 1 ms
 var player1grow = setInterval(playerGrow, 750);
