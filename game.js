@@ -275,31 +275,36 @@ function playerCollisionDetection() {
     }
 }
 
-/**
- * Determines if a player's radius is less than 5. If player's radius is less than 5
- * end the game and determine the other player as the winner!
- */
-function gameOver() {
-    if (player1radius < 5) {
-        winner = "Player 2";
-    }
-    if (player2radius < 5) {
-        winner = "Player 1";
-    }
-}
+
 
 /**
  * Clears the canvas then redraws the game state
  */
 function draw() {
-    gameOver();
     ctx.clearRect(0, 0, canvas.width, canvas.height); //clears canvas for a complete redraw
+    //Determine if there was a winner and display a game over screen
     if (winner != "null") {
-        ctx.font = "40px Arial";
-        ctx.fillStyle = "blue";
+        ctx.save();
+        ctx.font = "68px Arial";
         ctx.textAlign = "center";
+        ctx.fillStyle = "#22ff12";
         ctx.fillText(winner + " Wins!", canvas.width/2, canvas.height/2);
+        ctx.restore();
+        ctx.save();
+        ctx.font = "30px Arial";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#ff7bc1";
+        ctx.fillText("Press ENTER to play again", canvas.width/2, (canvas.height/2)+60);
+        ctx.restore();
     } else {
+        if (player1radius < 5) {
+            winner = "Player 2";
+            waves = [];
+        }
+        if (player2radius < 5) {
+            winner = "Player 1";
+            waves = [];
+        }
         drawBursts();
         drawMiddleLine();
         drawBorder();
