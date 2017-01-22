@@ -67,11 +67,16 @@ function drawBorder() {
  * Draws player 1 to the canvas
  */
 function drawPlayer1() {
+    ctx.save();
     ctx.beginPath();
     ctx.arc(x1, y1, player1radius, 0, Math.PI*2);
     ctx.fillStyle = "#9495DD";
     ctx.fill();
     ctx.closePath();
+    ctx.strokeStyle = '#4a4b72';
+    ctx.lineWidth = 6;
+    ctx.stroke();
+    ctx.restore();
 }
 
 
@@ -101,11 +106,16 @@ function drawBursts() {
  * Draws player 2 to the canvas
  */
 function drawPlayer2() {
+    ctx.save();
     ctx.beginPath();
     ctx.arc(x2, y2, player2radius, 0, Math.PI*2);
     ctx.fillStyle = "#dd504a";
     ctx.fill();
     ctx.closePath();
+    ctx.strokeStyle = '#722826';
+    ctx.lineWidth = 6;
+    ctx.stroke();
+    ctx.restore();
 }
 
 function drawPlayer2Charge() {
