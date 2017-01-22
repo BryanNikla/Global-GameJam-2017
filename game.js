@@ -1,6 +1,6 @@
+//turns off default browser actions for specific buttons that can cause problems while playing
 window.addEventListener("keydown", function(e) {
-    // space and arrow keys
-    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+    if([9, 32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
         e.preventDefault();
     }
 }, false);
@@ -68,6 +68,8 @@ function resetGame(){
 //Game arrays
 var waves = [];
 var bursts = [];
+var blueBursts = [];
+var redBursts = [];
 
 //// PLAYER 1 VARIABLES/////////////
 var x1 = canvas.width/4;
@@ -153,6 +155,9 @@ function drawPlayer1Charge() {
 
 function drawBursts() {
     for (b = 0; b < bursts.length; b++) {
+        if (bursts[b].r > 1000) {
+            bursts.splice(b, 1); //remove the burst from the array
+        }
         ctx.save();
         ctx.beginPath();
         ctx.arc(bursts[b].x, bursts[b].y, bursts[b].r, 0, Math.PI*2);
@@ -164,6 +169,42 @@ function drawBursts() {
         ctx.restore();
     }
 }
+
+
+function drawBlueBursts() {
+    for (bb = 0; bb < blueBursts.length; bb++) {
+        if (blueBursts[bb].r > 1000) {
+            blueBursts.splice(bb, 1); //remove the burst from the array
+        }
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(blueBursts[bb].x, blueBursts[bb].y, blueBursts[bb].r, 0, Math.PI*2);
+        ctx.strokeStyle = '#1f269e';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.closePath();
+        blueBursts[bb].r = blueBursts[bb].r + blueBursts[bb].intensity;
+        ctx.restore();
+    }
+}
+
+function drawRedBursts() {
+    for (rb = 0; rb < redBursts.length; rb++) {
+        if (redBursts[rb].r > 1000) {
+            redBursts.splice(rb, 1); //remove the burst from the array
+        }
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(redBursts[rb].x, redBursts[rb].y, redBursts[rb].r, 0, Math.PI*2);
+        ctx.strokeStyle = '#a10c05';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.closePath();
+        redBursts[rb].r = redBursts[rb].r + redBursts[rb].intensity;
+        ctx.restore();
+    }
+}
+
 
 /**
  * Draws player 2 to the canvas
@@ -232,6 +273,14 @@ function playerCollisionDetection() {
             if (waves[c].power <21) {
                 player1radius -= 5;
             }
+            //create a Blue BURST and push it into the Blue burst array
+            var blueIntensity = 3;
+            blueBursts.push({
+                x: waves[c].x,
+                y: waves[c].y,
+                intensity: blueIntensity,
+                r: 1
+            });
             waves.splice(c, 1); //remove the wave from the array
         }
         if(circlesColliding(player2, wave) && waves[c].player == 1){
@@ -252,6 +301,14 @@ function playerCollisionDetection() {
             if (waves[c].power <21) {
                 player2radius -= 5;
             }
+            //create a red BURST and push it into the red burst array
+            var redIntensity = 3;
+            redBursts.push({
+                x: waves[c].x,
+                y: waves[c].y,
+                intensity: redIntensity,
+                r: 1
+            });
             waves.splice(c, 1); //remove the wave from the array
         }
         //CHECK TO SEE IF WAVE COLLIDED WITH ANOTHER WAVE
@@ -262,7 +319,6 @@ function playerCollisionDetection() {
                     //do nothing
                 } else {
                     //detected 2 waves collided. remove both waves from the waves array.
-                    console.log("Waves Collided!");
                     //determine intensity
                     var intensity = 0;
                     combinedPower = waves[c].power + waves[k].power;
@@ -333,6 +389,8 @@ function draw() {
             waves = [];
         }
         drawBursts();
+        drawBlueBursts();
+        drawRedBursts();
         drawMiddleLine();
         drawBorder();
         drawPlayer1();
