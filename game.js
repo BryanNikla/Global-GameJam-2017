@@ -5,6 +5,15 @@ window.addEventListener("keydown", function(e) {
     }
 }, false);
 
+//AUDIO
+var hitAudio = new Audio("sound1.wav");
+var burstAudio = new Audio("burst.wav");
+var shot10 = new Audio("shot10.wav"); // weakest shot
+var shot20 = new Audio("shot20.wav");
+var shot30 = new Audio("shot30.wav");
+var shot40 = new Audio("shot40.wav"); // full charge shot
+
+
 
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
@@ -156,6 +165,9 @@ function drawPlayer1Charge() {
 
 
 function drawBursts() {
+    while(bursts.length > 10) {
+        bursts.splice(0, 1); //remove the burst from the array
+    }
     for (b = 0; b < bursts.length; b++) {
         if (bursts[b].r > 1000) {
             bursts.splice(b, 1); //remove the burst from the array
@@ -258,19 +270,19 @@ function playerCollisionDetection() {
         var player2= { x:x2, y:y2, r:player2radius };
         var wave = { x:waves[c].x, y:waves[c].y, r:waves[c].power };
         if(circlesColliding(player1, wave) && waves[c].player == 2){
-            console.log("PLAYER 1 HIT!");
-            console.log("Wave's Power: " + waves[c].power);
+            console.log("PLAYER 1 HIT!!  Wave's Power: " + waves[c].power);
+            hitAudio.play(); //plays sound effect on hit
             if (waves[c].power <5) {
-                player1radius -= 1;
+                player1radius -= 0.5;
             }
             if (waves[c].power <10) {
-                player1radius -= 2;
+                player1radius -= 1;
             }
             if (waves[c].power <15) {
-                player1radius -= 3;
+                player1radius -= 1.5;
             }
             if (waves[c].power <20) {
-                player1radius -= 4;
+                player1radius -= 3;
             }
             if (waves[c].power <21) {
                 player1radius -= 5;
@@ -286,19 +298,19 @@ function playerCollisionDetection() {
             waves.splice(c, 1); //remove the wave from the array
         }
         if(circlesColliding(player2, wave) && waves[c].player == 1){
-            console.log("PLAYER 2 HIT!");
-            console.log("Wave's Power: " + waves[c].power);
+            console.log("PLAYER 2 HIT!!  Wave's Power: " + waves[c].power);
+            hitAudio.play(); //plays sound effect on hit
             if (waves[c].power <5) {
-                player2radius -= 1;
+                player2radius -= 0.5;
             }
             if (waves[c].power <10) {
-                player2radius -= 2;
+                player2radius -= 1;
             }
             if (waves[c].power <15) {
-                player2radius -= 3;
+                player2radius -= 1.5;
             }
             if (waves[c].power <20) {
-                player2radius -= 4;
+                player2radius -= 3;
             }
             if (waves[c].power <21) {
                 player2radius -= 5;
@@ -339,6 +351,7 @@ function playerCollisionDetection() {
                     if (combinedPower < 10) {
                         intensity = 1;
                     }
+                    burstAudio.play(); //plays sound effect on hit
                     //create a BURST and push it into the burst array
                     bursts.push({
                         x: waves[c].x,
@@ -422,6 +435,9 @@ function draw() {
         }
 
         //DRAW THE WAVES
+        while(waves.length > 50) {
+            waves.splice(0, 1); //remove the burst from the array
+        }
         for (w = 0; w < waves.length; w++) {
             ctx.beginPath();
             ctx.arc(waves[w].x, waves[w].y, waves[w].power, 0, Math.PI*2);
@@ -578,6 +594,11 @@ function keyUpHandler(e) {
         } else {
             dy1 = dy1 + player1moveSpeedVertical;
         }
+        //Sound Effects
+        if ( player1charge < 10 ){ shot10.play(); }
+        if ( player1charge < 20 ){ shot20.play(); }
+        if ( player1charge < 30 ){ shot30.play(); }
+        if ( player1charge < 41 ){ shot40.play(); }
         //create a wave and push it into the waves array
         waves.push({
             x: x1,
@@ -600,6 +621,11 @@ function keyUpHandler(e) {
         } else {
             dy1 = dy1 - player1moveSpeedVertical;
         }
+        //Sound Effects
+        if ( player1charge < 10 ){ shot10.play(); }
+        if ( player1charge < 20 ){ shot20.play(); }
+        if ( player1charge < 30 ){ shot30.play(); }
+        if ( player1charge < 41 ){ shot40.play(); }
         //create a wave and push it into the waves array
         waves.push({
             x: x1,
@@ -622,6 +648,11 @@ function keyUpHandler(e) {
         } else {
             dx1 = dx1 + player1moveSpeedHorizontal;
         }
+        //Sound Effects
+        if ( player1charge < 10 ){ shot10.play(); }
+        if ( player1charge < 20 ){ shot20.play(); }
+        if ( player1charge < 30 ){ shot30.play(); }
+        if ( player1charge < 41 ){ shot40.play(); }
         //create a wave and push it into the waves array
         waves.push({
             x: x1 - (player1radius*1.2) - player1charge,
@@ -644,6 +675,11 @@ function keyUpHandler(e) {
         } else {
             dx1 = dx1 - player1moveSpeedHorizontal;
         }
+        //Sound Effects
+        if ( player1charge < 10 ){ shot10.play(); }
+        if ( player1charge < 20 ){ shot20.play(); }
+        if ( player1charge < 30 ){ shot30.play(); }
+        if ( player1charge < 41 ){ shot40.play(); }
         //create a wave and push it into the waves array
         waves.push({
             x: x1 + (player1radius*1.2) + player1charge,
@@ -666,6 +702,11 @@ function keyUpHandler(e) {
         } else {
             dy2 = dy2 + player2moveSpeedVertical;
         }
+        //Sound Effects
+        if ( player2charge < 10 ){ shot10.play(); }
+        if ( player2charge < 20 ){ shot20.play(); }
+        if ( player2charge < 30 ){ shot30.play(); }
+        if ( player2charge < 41 ){ shot40.play(); }
         //create a wave and push it into the waves array
         waves.push({
             x: x2,
@@ -688,6 +729,11 @@ function keyUpHandler(e) {
         } else {
             dy2 = dy2 - player2moveSpeedVertical;
         }
+        //Sound Effects
+        if ( player2charge < 10 ){ shot10.play(); }
+        if ( player2charge < 20 ){ shot20.play(); }
+        if ( player2charge < 30 ){ shot30.play(); }
+        if ( player2charge < 41 ){ shot40.play(); }
         //create a wave and push it into the waves array
         waves.push({
             x: x2,
@@ -710,6 +756,11 @@ function keyUpHandler(e) {
         } else {
             dx2 = dx2 + player2moveSpeedHorizontal;
         }
+        //Sound Effects
+        if ( player2charge < 10 ){ shot10.play(); }
+        if ( player2charge < 20 ){ shot20.play(); }
+        if ( player2charge < 30 ){ shot30.play(); }
+        if ( player2charge < 41 ){ shot40.play(); }
         //create a wave and push it into the waves array
         waves.push({
             x: x2 - (player2radius*1.2) - player2charge,
@@ -732,6 +783,11 @@ function keyUpHandler(e) {
         } else {
             dx2 = dx2 - player2moveSpeedHorizontal;
         }
+        //Sound Effects
+        if ( player2charge < 10 ){ shot10.play(); }
+        if ( player2charge < 20 ){ shot20.play(); }
+        if ( player2charge < 30 ){ shot30.play(); }
+        if ( player2charge < 41 ){ shot40.play(); }
         //create a wave and push it into the waves array
         waves.push({
             x: x2 + (player2radius*1.2) - player2charge,
