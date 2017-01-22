@@ -1,11 +1,50 @@
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
+
+
+
+function drawTitle() {
+    ctx.save();
+    ctx.font = "30px Arial";
+    ctx.fillText("Hello World",10,50);
+    ctx.restore();
+}
+
+function resetGame(){
+    waves = [];
+    bursts = [];
+    x1 = canvas.width/4;
+    y1 = canvas.height/2;
+    dx1 = 0;
+    dy1 = 0;
+    player1radius = 40; //size of player 1
+    upPressed1 = false;
+    downPressed1 = false;
+    leftPressed1 = false;
+    rightPressed1 = false;
+    player1moveSpeedVertical = 0;
+    player1moveSpeedHorizontal = 0;
+    player1charge = 0;
+    x2 = canvas.width * 0.75;
+    y2 = canvas.height/2;
+    dx2 = 0;
+    dy2 = 0;
+    player2radius = 40; //size of player 2
+    upPressed2 = false;
+    downPressed2 = false;
+    leftPressed2 = false;
+    rightPressed2 = false;
+    player2moveSpeedVertical = 0;
+    player2moveSpeedHorizontal = 0;
+    player2charge = 0;
+}
+
+//Game arrays
 var waves = [];
-
 var bursts = [];
-
-
+//winner variable
+var winner = "null";
 //// PLAYER 1 VARIABLES/////////////
 var x1 = canvas.width/4;
 var y1 = canvas.height/2;
@@ -20,7 +59,6 @@ var player1moveSpeedVertical = 0;
 var player1moveSpeedHorizontal = 0;
 var player1charge = 0;
 ////////////////////////////////////
-
 //// PLAYER 2 VARIABLES ////////////
 var x2 = canvas.width * 0.75;
 var y2 = canvas.height/2;
@@ -243,20 +281,10 @@ function playerCollisionDetection() {
  */
 function gameOver() {
     if (player1radius < 5) {
-        clearInterval(gamePlay);
-        ctx.beginPath();
-        ctx.font = "16px Arial";
-        ctx.fillText("PLAYER 2 WINS!",(canvas.width/2),canvas.height/2);
-        //todo: fix this
-        ctx.closePath();
-        console.log("GAME OVER. Player 2 WINS");
-
+        winner = "Player 2";
     }
     if (player2radius < 5) {
-        clearInterval(gamePlay);
-        ctx.font = "16px Arial";
-        ctx.fillText("PLAYER 1 WINS!",(canvas.width/2),canvas.height/2);
-        console.log("GAME OVER. Player 1 WINS");
+        winner = "Player 1";
     }
 }
 
@@ -266,133 +294,137 @@ function gameOver() {
 function draw() {
     gameOver();
     ctx.clearRect(0, 0, canvas.width, canvas.height); //clears canvas for a complete redraw
-    drawBursts();
-    drawMiddleLine();
-    drawBorder();
-    drawPlayer1();
-    drawPlayer2();
-    drawPlayer1Charge();
-    drawPlayer2Charge();
-    playerCollisionDetection();
-    x1 += dx1;
-    y1 += dy1;
-    x2 += dx2;
-    y2 += dy2;
+    if (winner != "null") {
+        ctx.font = "40px Arial";
+        ctx.fillStyle = "blue";
+        ctx.textAlign = "center";
+        ctx.fillText(winner + " Wins!", canvas.width/2, canvas.height/2);
+    } else {
+        drawBursts();
+        drawMiddleLine();
+        drawBorder();
+        drawPlayer1();
+        drawPlayer2();
+        drawPlayer1Charge();
+        drawPlayer2Charge();
+        playerCollisionDetection();
+        x1 += dx1;
+        y1 += dy1;
+        x2 += dx2;
+        y2 += dy2;
 
-    //player 1 collisions
-    if(x1 + dx1 > canvas.width/2 - player1radius || x1 + dx1 < player1radius) {
-        dx1 = -dx1;
-    }
-    if(y1 + dy1 > canvas.height - player1radius || y1 + dy1 < player1radius) {
-        dy1 = -dy1;
-    }
-
-    //player 2 collisions
-    if(x2 + dx2 < canvas.width/2 + player2radius || x2 + dx2 > canvas.width - player2radius) {
-        dx2 = -dx2;
-    }
-    if(y2 + dy2 > canvas.height - player2radius || y2 + dy2 < player2radius) {
-        dy2 = -dy2;
-    }
-
-    //DRAW THE WAVES
-    for (w = 0; w < waves.length; w++) {
-        ctx.beginPath();
-        ctx.arc(waves[w].x, waves[w].y, waves[w].power, 0, Math.PI*2);
-
-        if (waves[w].player == 1) {
-            ctx.fillStyle = "#1A19DD";
-            ctx.save();
-            ctx.shadowBlur = 40;
-            ctx.shadowColor = "blue";
-        } else {
-            ctx.fillStyle = "#dd100f";
-            ctx.save();
-            ctx.shadowBlur = 40;
-            ctx.shadowColor = "red";
+        //player 1 collisions
+        if(x1 + dx1 > canvas.width/2 - player1radius || x1 + dx1 < player1radius) {
+            dx1 = -dx1;
         }
-        ctx.fill();
-        ctx.closePath();
-        ctx.restore();
+        if(y1 + dy1 > canvas.height - player1radius || y1 + dy1 < player1radius) {
+            dy1 = -dy1;
+        }
 
-        waves[w].x = waves[w].x + waves[w].dx;
-        waves[w].y = waves[w].y + waves[w].dy;
-        ///////// wave collisions  with walls //////////////
-        if(waves[w].x + waves[w].dx > canvas.width- waves[w].power || waves[w].x + waves[w].dx < waves[w].power) {
-            waves[w].dx = -waves[w].dx; //reverse the dx
-            if (waves[w].power < 3) {
-                waves.splice(w, 1); //remove the wave from the array
+        //player 2 collisions
+        if(x2 + dx2 < canvas.width/2 + player2radius || x2 + dx2 > canvas.width - player2radius) {
+            dx2 = -dx2;
+        }
+        if(y2 + dy2 > canvas.height - player2radius || y2 + dy2 < player2radius) {
+            dy2 = -dy2;
+        }
+
+        //DRAW THE WAVES
+        for (w = 0; w < waves.length; w++) {
+            ctx.beginPath();
+            ctx.arc(waves[w].x, waves[w].y, waves[w].power, 0, Math.PI*2);
+
+            if (waves[w].player == 1) {
+                ctx.fillStyle = "#1A19DD";
+                ctx.save();
+                ctx.shadowBlur = 40;
+                ctx.shadowColor = "blue";
             } else {
-                waves[w].power = waves[w].power - 3;
-                if (waves[w].player == 1) {
-                    waves[w].player = 2;
+                ctx.fillStyle = "#dd100f";
+                ctx.save();
+                ctx.shadowBlur = 40;
+                ctx.shadowColor = "red";
+            }
+            ctx.fill();
+            ctx.closePath();
+            ctx.restore();
+
+            waves[w].x = waves[w].x + waves[w].dx;
+            waves[w].y = waves[w].y + waves[w].dy;
+            ///////// wave collisions  with walls //////////////
+            if(waves[w].x + waves[w].dx > canvas.width- waves[w].power || waves[w].x + waves[w].dx < waves[w].power) {
+                waves[w].dx = -waves[w].dx; //reverse the dx
+                if (waves[w].power < 3) {
+                    waves.splice(w, 1); //remove the wave from the array
                 } else {
-                    waves[w].player = 1;
+                    waves[w].power = waves[w].power - 3;
+                    if (waves[w].player == 1) {
+                        waves[w].player = 2;
+                    } else {
+                        waves[w].player = 1;
+                    }
                 }
             }
-        }
-        if(waves[w].y + waves[w].dy > canvas.height- waves[w].power || waves[w].y + waves[w].dy < waves[w].power) {
-            waves[w].dy = -waves[w].dy; //reverse the dy
-            if (waves[w].power < 3) {
-                waves.splice(w, 1); //remove the wave from the array
-            } else {
-                waves[w].power = waves[w].power - 3;
-                if (waves[w].player == 1) {
-                    waves[w].player = 2;
+            if(waves[w].y + waves[w].dy > canvas.height- waves[w].power || waves[w].y + waves[w].dy < waves[w].power) {
+                waves[w].dy = -waves[w].dy; //reverse the dy
+                if (waves[w].power < 3) {
+                    waves.splice(w, 1); //remove the wave from the array
                 } else {
-                    waves[w].player = 1;
+                    waves[w].power = waves[w].power - 3;
+                    if (waves[w].player == 1) {
+                        waves[w].player = 2;
+                    } else {
+                        waves[w].player = 1;
+                    }
                 }
             }
+            ////////////////end of wave collisions with walls /////////
         }
-        ////////////////end of wave collisions with walls /////////
-    }
 
+        //Sets player 1 charge up or down. TODO: THIS WILL HANDLE SHOOTING POWER?
+        if(upPressed1) {
+            if (player1charge < 40) {
+                player1charge += 1;
+            }
+        }
+        else if(downPressed1) {
+            if (player1charge < 40) {
+                player1charge += 1;
+            }
+        }
+        //Moves Player 1 LEFT or RIGHT
+        if(leftPressed1) {
+            if (player1charge < 40) {
+                player1charge += 1;
+            }
+        }
+        else if(rightPressed1) {
+            if (player1charge < 40) {
+                player1charge += 1;
+            }
+        }
 
-
-
-    //Sets player 1 charge up or down. TODO: THIS WILL HANDLE SHOOTING POWER?
-    if(upPressed1) {
-        if (player1charge < 40) {
-            player1charge += 1;
+        //Moves Player 2 UP or DOWN
+        if(upPressed2) {
+            if (player2charge < 40) {
+                player2charge += 1;
+            }
         }
-    }
-    else if(downPressed1) {
-        if (player1charge < 40) {
-            player1charge += 1;
+        else if(downPressed2) {
+            if (player2charge < 40) {
+                player2charge += 1;
+            }
         }
-    }
-    //Moves Player 1 LEFT or RIGHT
-    if(leftPressed1) {
-        if (player1charge < 40) {
-            player1charge += 1;
+        //Moves Player 2 LEFT or RIGHT
+        if(leftPressed2) {
+            if (player2charge < 40) {
+                player2charge += 1;
+            }
         }
-    }
-    else if(rightPressed1) {
-        if (player1charge < 40) {
-            player1charge += 1;
-        }
-    }
-
-    //Moves Player 2 UP or DOWN
-    if(upPressed2) {
-        if (player2charge < 40) {
-            player2charge += 1;
-        }
-    }
-    else if(downPressed2) {
-        if (player2charge < 40) {
-            player2charge += 1;
-        }
-    }
-    //Moves Player 2 LEFT or RIGHT
-    if(leftPressed2) {
-        if (player2charge < 40) {
-            player2charge += 1;
-        }
-    }
-    else if(rightPressed2) {
-        if (player2charge < 40) {
-            player2charge += 1;
+        else if(rightPressed2) {
+            if (player2charge < 40) {
+                player2charge += 1;
+            }
         }
     }
 }
@@ -403,6 +435,11 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 //Key press listener
 function keyDownHandler(e) {
+    // key => ENTER  --- Restart Game
+    if(e.keyCode == 13) {
+        winner = "null";
+        resetGame();
+    }
     // key => W  --- PLAYER 1
     if(e.keyCode == 87) {
         upPressed1 = true;
