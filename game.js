@@ -2,12 +2,29 @@ var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
 
+//win variable
+var winner = "null";
+var player1wins = 0;
+var player2wins = 0;
 
 
 function drawTitle() {
     ctx.save();
     ctx.font = "30px Arial";
     ctx.fillText("Hello World",10,50);
+    ctx.restore();
+}
+
+function drawWins() {
+    ctx.save();
+    ctx.font = "50px Arial";
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(player1wins,5, 45);
+    ctx.restore();
+    ctx.save();
+    ctx.font = "50px Arial";
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(player2wins, canvas.width - 33, 45);
     ctx.restore();
 }
 
@@ -43,8 +60,7 @@ function resetGame(){
 //Game arrays
 var waves = [];
 var bursts = [];
-//winner variable
-var winner = "null";
+
 //// PLAYER 1 VARIABLES/////////////
 var x1 = canvas.width/4;
 var y1 = canvas.height/2;
@@ -59,6 +75,7 @@ var player1moveSpeedVertical = 0;
 var player1moveSpeedHorizontal = 0;
 var player1charge = 0;
 ////////////////////////////////////
+
 //// PLAYER 2 VARIABLES ////////////
 var x2 = canvas.width * 0.75;
 var y2 = canvas.height/2;
@@ -263,7 +280,6 @@ function playerCollisionDetection() {
                         intensity: intensity,
                         r: 1
                     });
-                    console.log(bursts);
                     var wavesToRemove = [c, k];
                     wavesToRemove.sort();
                     for (var i = wavesToRemove.length - 1; i >= 0; i--){
@@ -282,6 +298,7 @@ function playerCollisionDetection() {
  */
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); //clears canvas for a complete redraw
+    drawWins();
     //Determine if there was a winner and display a game over screen
     if (winner != "null") {
         ctx.save();
@@ -299,10 +316,12 @@ function draw() {
     } else {
         if (player1radius < 5) {
             winner = "Player 2";
+            player2wins += 1;
             waves = [];
         }
         if (player2radius < 5) {
             winner = "Player 1";
+            player1wins += 1;
             waves = [];
         }
         drawBursts();
@@ -485,9 +504,6 @@ function keyUpHandler(e) {
     if(e.keyCode == 87) {
         upPressed1 = false;
         player1moveSpeedVertical = player1charge / 5;
-        console.log("///////////////////////");
-        console.log("Player 1 charge: " + player1charge);
-        console.log("player 1 move sp Vertical: " + player1moveSpeedVertical);
         if (dy1 < 0) {
             dy1 = 0;
             dy1 = dy1 + player1moveSpeedVertical;
@@ -510,9 +526,6 @@ function keyUpHandler(e) {
     else if(e.keyCode == 83) {
         downPressed1 = false;
         player1moveSpeedVertical = player1charge / 5;
-        console.log("///////////////////////");
-        console.log("Player 1 charge: " + player1charge);
-        console.log("player 1 move speed: " + player1moveSpeedVertical);
         if (dy1 > 0) {
             dy1 = 0;
             dy1 = dy1 - player1moveSpeedVertical;
@@ -535,9 +548,6 @@ function keyUpHandler(e) {
     else if(e.keyCode == 65) {
         leftPressed1 = false;
         player1moveSpeedHorizontal = player1charge / 10;
-        console.log("///////////////////////");
-        console.log("Player 1 charge: " + player1charge);
-        console.log("player 1 move sp Horizontal: " + player1moveSpeedHorizontal);
         if (dx1 < 0) {
             dx1 = 0;
             dx1 = dx1 + player1moveSpeedHorizontal;
@@ -560,9 +570,6 @@ function keyUpHandler(e) {
     else if(e.keyCode == 68) {
         rightPressed1 = false;
         player1moveSpeedHorizontal = player1charge / 10;
-        console.log("///////////////////////");
-        console.log("Player 1 charge: " + player1charge);
-        console.log("player 1 move sp Horizontal: " + player1moveSpeedHorizontal);
         if (dx1 > 0) {
             dx1 = 0;
             dx1 = dx1 - player1moveSpeedHorizontal;
@@ -585,9 +592,6 @@ function keyUpHandler(e) {
     if(e.keyCode == 38) {
         upPressed2 = false;
         player2moveSpeedVertical = player2charge / 10;
-        console.log("///////////////////////");
-        console.log("Player 2 charge: " + player2charge);
-        console.log("player 2 move sp Vertical: " + player2moveSpeedVertical);
         if (dy2 < 0) {
             dy2 = 0;
             dy2 = dy2 + player2moveSpeedVertical;
@@ -610,9 +614,6 @@ function keyUpHandler(e) {
     else if(e.keyCode == 40) {
         downPressed2 = false;
         player2moveSpeedVertical = player2charge / 10;
-        console.log("///////////////////////");
-        console.log("Player 2 charge: " + player2charge);
-        console.log("player 2 move speed: " + player2moveSpeedVertical);
         if (dy2 > 0) {
             dy2 = 0;
             dy2 = dy2 - player2moveSpeedVertical;
@@ -635,9 +636,6 @@ function keyUpHandler(e) {
     else if(e.keyCode == 37) {
         leftPressed2 = false;
         player2moveSpeedHorizontal = player2charge / 10;
-        console.log("///////////////////////");
-        console.log("Player 2 charge: " + player2charge);
-        console.log("player 2 move sp Horizontal: " + player2moveSpeedHorizontal);
         if (dx2 < 0) {
             dx2 = 0;
             dx2 = dx2 + player2moveSpeedHorizontal;
@@ -660,9 +658,6 @@ function keyUpHandler(e) {
     else if(e.keyCode == 39) {
         rightPressed2 = false;
         player2moveSpeedHorizontal = player2charge / 10;
-        console.log("///////////////////////");
-        console.log("Player 2 charge: " + player2charge);
-        console.log("player 2 move sp Horizontal: " + player2moveSpeedHorizontal);
         if (dx2 > 0) {
             dx2 = 0;
             dx2 = dx2 - player2moveSpeedHorizontal;
