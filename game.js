@@ -3,6 +3,8 @@ var ctx = canvas.getContext("2d");
 
 var waves = [];
 
+var bursts = [];
+
 
 //// PLAYER 1 VARIABLES/////////////
 var x1 = canvas.width/4;
@@ -61,7 +63,6 @@ function drawBorder() {
     ctx.restore();
 }
 
-
 /**
  * Draws player 1 to the canvas
  */
@@ -73,11 +74,27 @@ function drawPlayer1() {
     ctx.closePath();
 }
 
+
 function drawPlayer1Charge() {
     ctx.beginPath();
     ctx.arc(x1, y1, player1radius*( ((player1charge*100)/40)/100 ), 0, Math.PI*2);
     ctx.fillStyle = "#03ddc1";
     ctx.fill();
+}
+
+
+function drawBursts() {
+    for (b = 0; b < bursts.length; b++) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(bursts[b].x, bursts[b].y, bursts[b].r, 0, Math.PI*2);
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.closePath();
+        bursts[b].r = bursts[b].r + bursts[b].intensity;
+        ctx.restore();
+    }
 }
 
 /**
@@ -164,6 +181,7 @@ function playerCollisionDetection() {
             }
             waves.splice(c, 1); //remove the wave from the array
         }
+        //CHECK TO SEE IF WAVE COLLIDED WITH ANOTHER WAVE
         for (k = 0; k < waves.length; k++) {
             var otherWave = { x:waves[k].x, y:waves[k].y, r:waves[k].power };
             if(circlesColliding(wave, otherWave)){
@@ -172,6 +190,32 @@ function playerCollisionDetection() {
                 } else {
                     //detected 2 waves collided. remove both waves from the waves array.
                     console.log("Waves Collided!");
+                    //determine intensity
+                    var intensity = 0;
+                    combinedPower = waves[c].power + waves[k].power;
+                    if (combinedPower < 41) {
+                        intensity = 5;
+                    }
+                    if (combinedPower < 40) {
+                        intensity = 4;
+                    }
+                    if (combinedPower < 30) {
+                        intensity = 3;
+                    }
+                    if (combinedPower < 20) {
+                        intensity = 2;
+                    }
+                    if (combinedPower < 10) {
+                        intensity = 1;
+                    }
+                    //create a BURST and push it into the burst array
+                    bursts.push({
+                        x: waves[c].x,
+                        y: waves[c].y,
+                        intensity: intensity,
+                        r: 1
+                    });
+                    console.log(bursts);
                     var wavesToRemove = [c, k];
                     wavesToRemove.sort();
                     for (var i = wavesToRemove.length - 1; i >= 0; i--){
@@ -212,6 +256,7 @@ function gameOver() {
 function draw() {
     gameOver();
     ctx.clearRect(0, 0, canvas.width, canvas.height); //clears canvas for a complete redraw
+    drawBursts();
     drawMiddleLine();
     drawBorder();
     drawPlayer1();
@@ -596,3 +641,4 @@ function playerGrow(){
 
 var gamePlay = setInterval(draw, 25); //call the draw() function every 1 ms
 var player1grow = setInterval(playerGrow, 750);
+//var burstInterval = setInterval(drawBursts, 1000);
