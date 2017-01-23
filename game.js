@@ -784,7 +784,7 @@ function keyUpHandler(e) {
                 dx: -(player1charge/5),
                 dy: -(player1charge/5),
                 player: 1,
-                power: 4
+                power: 7
             });
             waves.push({
                 x: x1 + (player1radius*1.4) - player1charge,
@@ -792,11 +792,11 @@ function keyUpHandler(e) {
                 dx: (player1charge/5),
                 dy: -(player1charge/5),
                 player: 1,
-                power: 4
+                power: 7
             });
             player1gun -= 1;
         }
-        player1radius -= player1charge/10;
+        player1radius -= 2;
         player1charge = 0;
     }
     // key => S  --- PLAYER 1
@@ -833,7 +833,7 @@ function keyUpHandler(e) {
                 dx: -(player1charge/5),
                 dy: (player1charge/5),
                 player: 1,
-                power: 4
+                power: 7
             });
             waves.push({
                 x: x1 + (player1radius*1.4) - player1charge,
@@ -841,11 +841,11 @@ function keyUpHandler(e) {
                 dx: (player1charge/5),
                 dy: (player1charge/5),
                 player: 1,
-                power: 4
+                power: 7
             });
             player1gun -= 1;
         }
-        player1radius -= player1charge/10;
+        player1radius -= 2;
         player1charge = 0;
     }
     // key => A  --- PLAYER 1
@@ -882,7 +882,7 @@ function keyUpHandler(e) {
                 dx: -(player1charge/5),
                 dy: -(player1charge/5),
                 player: 1,
-                power: 4
+                power: 7
             });
             waves.push({
                 x: x1 - (player1radius*1.4) - player1charge,
@@ -890,11 +890,11 @@ function keyUpHandler(e) {
                 dx: -(player1charge/5),
                 dy: (player1charge/5),
                 player: 1,
-                power: 4
+                power: 7
             });
             player1gun -= 1;
         }
-        player1radius -= player1charge/10;
+        player1radius -= 2;
         player1charge = 0;
     }
     // key => D  --- PLAYER 1
@@ -931,7 +931,7 @@ function keyUpHandler(e) {
                 dx: (player1charge/5),
                 dy: (player1charge/5),
                 player: 1,
-                power: 4
+                power: 7
             });
             waves.push({
                 x: x1 + (player1radius*1.4) - player1charge,
@@ -939,11 +939,11 @@ function keyUpHandler(e) {
                 dx: (player1charge/5),
                 dy: -(player1charge/5),
                 player: 1,
-                power: 4
+                power: 7
             });
             player1gun -= 1;
         }
-        player1radius -= player1charge/10;
+        player1radius -= 2;
         player1charge = 0;
     }
     // key => Up Arrow  --- PLAYER 2
@@ -980,7 +980,7 @@ function keyUpHandler(e) {
                 dx: -(player2charge/5),
                 dy: -(player2charge/5),
                 player: 2,
-                power: 4
+                power: 7
             });
             waves.push({
                 x: x2 + (player2radius*1.4) - player2charge,
@@ -988,11 +988,11 @@ function keyUpHandler(e) {
                 dx: (player2charge/5),
                 dy: -(player2charge/5),
                 player: 2,
-                power: 4
+                power: 7
             });
             player2gun -= 1;
         }
-        player2radius -= player2charge/10;
+        player2radius -= 2;
         player2charge = 0;
     }
     // key => Down Arrow  --- PLAYER 2
@@ -1029,7 +1029,7 @@ function keyUpHandler(e) {
                 dx: -(player2charge/5),
                 dy: (player2charge/5),
                 player: 2,
-                power: 4
+                power: 7
             });
             waves.push({
                 x: x2 + (player2radius*1.4) - player2charge,
@@ -1037,11 +1037,11 @@ function keyUpHandler(e) {
                 dx: (player2charge/5),
                 dy: (player2charge/5),
                 player: 2,
-                power: 4
+                power: 7
             });
             player2gun -= 1;
         }
-        player2radius -= player2charge/10;
+        player2radius -= 2;
         player2charge = 0;
     }
     // key => Left Arrow  --- PLAYER 2
@@ -1078,7 +1078,7 @@ function keyUpHandler(e) {
                 dx: -(player2charge/5),
                 dy: -(player2charge/5),
                 player: 2,
-                power: 4
+                power: 7
             });
             waves.push({
                 x: x2 - (player2radius*1.4) - player2charge,
@@ -1086,11 +1086,11 @@ function keyUpHandler(e) {
                 dx: -(player2charge/5),
                 dy: (player2charge/5),
                 player: 2,
-                power: 4
+                power: 7
             });
             player2gun -= 1;
         }
-        player2radius -= player2charge/10;
+        player2radius -= 2;
         player2charge = 0;
     }
     // key => Right Arrow  --- PLAYER 2
@@ -1127,7 +1127,7 @@ function keyUpHandler(e) {
                 dx: (player2charge/5),
                 dy: (player2charge/5),
                 player: 2,
-                power: 4
+                power: 7
             });
             waves.push({
                 x: x2 + (player2radius*1.4) - player2charge,
@@ -1135,11 +1135,11 @@ function keyUpHandler(e) {
                 dx: (player2charge/5),
                 dy: -(player2charge/5),
                 player: 2,
-                power: 4
+                power: 7
             });
             player2gun -= 1;
         }
-        player2radius -= player2charge/10;
+        player2radius -= 2;
         player2charge = 0;
     }
 }

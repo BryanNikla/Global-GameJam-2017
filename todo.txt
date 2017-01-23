@@ -3,6 +3,8 @@ Stretch to-do list
 [X] Colored bursts that come off of players when hit by enemy color shots
 [X] Sound effects
 [X] Title screen
-[ ] Power-ups!
-[ ] Random start locations for each game restart
+[X] Power-ups!
 [X] Different damage levels for different sized shots
+[ ] The larger shot when 2 collide should destroy the smaller one and keep moving
+[ ] penalize player more for tiny shots
+
