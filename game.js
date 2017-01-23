@@ -514,6 +514,9 @@ function playerCollisionDetection() {
                         if (waves[c].power > waves[k].power) {
                             wavesToRemove = [k];
                             waves[c].power = waves[c].power * (0.80);
+                            if (waves[c].power < 5) {
+                                waves.splice(c, 1);
+                            }
                         }
                         if (waves[c].power < waves[k].power) {
                             wavesToRemove = [c];
