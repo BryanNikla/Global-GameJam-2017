@@ -508,7 +508,23 @@ function playerCollisionDetection() {
                             intensity: intensity,
                             r: 1
                         });
-                        var wavesToRemove = [c, k];
+                        var wavesToRemove = [];
+                        console.log("wave c:" + waves[c].power);
+                        console.log("wave k:" + waves[k].power);
+                        if (waves[c].power > waves[k].power) {
+                            wavesToRemove = [k];
+                            waves[c].power = waves[c].power * (0.80);
+                        }
+                        if (waves[c].power < waves[k].power) {
+                            wavesToRemove = [c];
+                            waves[k].power = waves[k].power * (0.80);
+                        }
+                        if (waves[c].power == waves[k].power) {
+                            wavesToRemove = [c, k];
+                        }
+
+                        //var wavesToRemove = [c, k];
+                        console.log(wavesToRemove);
                         wavesToRemove.sort();
                         for (var i = wavesToRemove.length - 1; i >= 0; i--){
                             waves.splice(wavesToRemove[i], 1);
